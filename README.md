@@ -1,10 +1,10 @@
-# Browser Use App
+# Computer Use Agent (CUA)
 
-A web interface for browser automation with AI agents.
+A web interface for AI-powered browser automation.
 
 ## Overview
 
-This application provides a Gradio-based web UI for controlling AI agents that can interact with web browsers. It's built with modularity, scalability, and ease of use in mind.
+CUA provides a Gradio-based web UI for controlling AI agents that can interact with web browsers. It's built with modularity, scalability, and ease of use in mind.
 
 ## Features
 
@@ -16,46 +16,15 @@ This application provides a Gradio-based web UI for controlling AI agents that c
 
 ## Architecture
 
-The Computer Use Agent (CUA) is an AI-powered browser automation system that allows intelligent agents to control a web browser to complete tasks. The architecture follows a modular design with clear separation of concerns across multiple components.
-
 ### System Overview
 
-```mermaid
-graph TD
-    User[User] --> |interacts with| WebUI[Web UI]
-    WebUI --> |passes tasks to| AgentManager[Agent Manager]
-    AgentManager --> |creates and controls| Agent[AI Agent]
-    Agent --> |uses| BrowserManager[Browser Manager]
-    BrowserManager --> |controls| Browser[Browser]
-    Browser --> |interacts with| Websites[Websites]
-    Agent --> |uses| LLM[Language Model]
-    
-    %% Component details
-    WebUI --> |builds UI with| UIBuilder[UI Builder]
-    WebUI --> |handles events with| UIHandlers[UI Handlers]
-    Agent --> |uses| Controller[Controller]
-    
-    %% Utilities
-    Utils[Utilities] --> WebUI
-    Utils --> Agent
-    Utils --> BrowserManager
-    
-    %% Entry Points
-    EntryPoints[Entry Points] --> |starts| WebUI
-    
-    %% Class definitions
-    classDef entryPoint fill:#f9f,stroke:#333,stroke-width:2px
-    classDef core fill:#bbf,stroke:#333,stroke-width:2px
-    classDef ui fill:#bfb,stroke:#333,stroke-width:2px
-    classDef browser fill:#ffb,stroke:#333,stroke-width:2px
-    classDef util fill:#ddd,stroke:#333,stroke-width:1px
-    
-    class EntryPoints entryPoint
-    class Agent,AgentManager,LLM core
-    class WebUI,UIBuilder,UIHandlers ui
-    class Browser,BrowserManager browser
-    class Utils,Controller util
-```
+CUA is an AI-powered browser automation system that allows intelligent agents to control a web browser to complete tasks. The architecture follows a modular design with clear separation of concerns across multiple components.
+
+The system consists of these main parts:
+- **User Interface (UI)**: A Gradio-based web interface for user interaction
+- **Agent System**: Manages AI agents that perform tasks
+- **Browser Control**: Handles browser automation
+- **LLM Integration**: Connects to various language models
 
 ### Key Components
 
@@ -78,70 +47,12 @@ graph TD
 - **FileUtils**: Handles file operations like saving recordings
 - **EnvUtils**: Manages environment variables and sensitive information
 
-### Component Interaction Flow
+### Flow Overview
 
-#### Application Startup Flow
+1. **Startup Flow**: User runs the application → Environment setup → UI initialization → Web interface display
+2. **Agent Execution**: User submits task → Agent creation → Browser initialization → Task execution → Results display
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant run.py
-    participant browser_use_app.py
-    participant UIBuilder
-    participant ComponentManager
-    participant UIHandlers
-    
-    User->>run.py: Execute ./run.py
-    run.py->>run.py: Setup environment & API keys
-    run.py->>browser_use_app.py: Execute main script
-    browser_use_app.py->>browser_use_app.py: Parse command line args
-    browser_use_app.py->>UIBuilder: Create UI builder
-    UIBuilder->>ComponentManager: Initialize components
-    ComponentManager->>ComponentManager: Scan and register components
-    UIBuilder->>UIHandlers: Create event handlers
-    UIBuilder->>UIBuilder: Build UI with Gradio
-    browser_use_app.py->>UIBuilder: Launch UI server
-    UIBuilder-->>User: Display web interface
-```
-
-#### Agent Execution Flow
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant UIHandlers
-    participant AgentManager
-    participant BrowserManager
-    participant LLMUtils
-    participant Agent
-    participant Browser
-    
-    User->>UIHandlers: Submit task with parameters
-    UIHandlers->>LLMUtils: Get LLM model
-    LLMUtils-->>UIHandlers: Return initialized LLM
-    UIHandlers->>BrowserManager: Initialize browser
-    BrowserManager-->>UIHandlers: Return browser
-    UIHandlers->>BrowserManager: Initialize context
-    BrowserManager-->>UIHandlers: Return browser context
-    UIHandlers->>AgentManager: Create agent
-    AgentManager->>Agent: Initialize agent
-    Agent-->>AgentManager: Return agent instance
-    UIHandlers->>AgentManager: Run agent
-    
-    loop For each step
-        AgentManager->>Agent: Execute step
-        Agent->>LLMUtils: Generate next action
-        LLMUtils-->>Agent: Return action
-        Agent->>Browser: Execute browser action
-        Browser-->>Agent: Return result
-        Agent->>Agent: Process result
-    end
-    
-    AgentManager-->>UIHandlers: Return execution results
-    UIHandlers-->>User: Display results and recordings
-```
-
-For more detailed architecture information, see [ARCHITECTURE.md](docs/ARCHITECTURE.md).
+For more detailed architecture information, including diagrams, see [ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Directory Structure
 
@@ -150,38 +61,14 @@ cua/
 ├── browser_use_app.py           # Main application entry point
 ├── run.py                       # Wrapper script to run the application
 ├── browser_use_ui/              # Main package
-│   ├── __init__.py              # Package initialization
 │   ├── agent/                   # Agent core components
-│   │   ├── custom_agent.py      # Custom agent implementation
-│   │   ├── custom_prompts.py    # Agent prompts
-│   │   └── ...
 │   ├── agents/                  # Agent management
-│   │   ├── agent_manager.py     # Agent lifecycle management
-│   │   └── ...
 │   ├── browser/                 # Browser control
-│   │   ├── browser_manager.py   # Browser lifecycle management
-│   │   ├── custom_browser.py    # Custom browser implementation
-│   │   └── ...
 │   ├── controller/              # Control logic
-│   │   ├── custom_controller.py # Custom controller
-│   │   └── ...
 │   ├── ui/                      # Web interface
-│   │   ├── ui_builder.py        # UI construction
-│   │   ├── handlers.py          # Event handlers
-│   │   ├── component_manager.py # UI component management
-│   │   └── ...
 │   └── utils/                   # Utilities
-│       ├── llm_utils.py         # LLM integration
-│       ├── file_utils.py        # File operations
-│       ├── env_utils.py         # Environment helpers
-│       └── ...
 ├── scripts/                     # Helper scripts
-│   ├── run_app.sh               # Shell script to run application
-│   ├── direct_run.sh            # Script with direct environment setup
-│   └── ...
 └── docs/                        # Documentation
-    ├── ARCHITECTURE.md          # Detailed architecture docs
-    └── ...
 ```
 
 ## Installation
@@ -196,7 +83,7 @@ cua/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/cua.git
+   git clone https://github.com/rpm-vectorial/cua.git
    cd cua
    ```
 
@@ -227,19 +114,23 @@ cua/
 
 ## Running the App
 
-### Using the Script
+### Using the Direct Run Script
 
-The easiest way to run the application is using the provided script:
+The easiest way to run the application is using:
+
+```bash
+./scripts/direct_run.sh
+```
+
+This script will set up your API keys and start the application.
+
+### Using the Regular Script
 
 ```bash
 ./scripts/run_app.sh
 ```
 
-This script will activate the virtual environment and start the application.
-
 ### Using Python Directly
-
-Alternatively, you can run the application directly:
 
 ```bash
 python browser_use_app.py --ip 127.0.0.1 --port 7788
