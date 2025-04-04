@@ -1,0 +1,60 @@
+# Version control
+.git
+.gitignore
+.github
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Project specific
+tmp/
+configs/
+record_videos/
+traces/
+agent_history/
+recordings/
+*.log
+*.zip
+*.mp4
+*.webm
+*.gif
+
+# Docs and other files
+README.md
+LICENSE
+docs/
+examples/
+tests/
+.env.example
